@@ -1,0 +1,654 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>TRAIL BOLIVIA ERP | Sistema Experto de Gestión</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+        background: #0b1120;
+        color: #f1f5f9;
+        scroll-behavior: smooth;
+    }
+
+    /* Custom Scroll */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #22c55e;
+        border-radius: 10px;
+    }
+
+    /* NAVBAR MODERNA */
+    nav {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        background: rgba(17, 24, 39, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 16px 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        border-bottom: 1px solid rgba(34,197,94,0.3);
+    }
+    nav h1 {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-size: 28px;
+        letter-spacing: -0.5px;
+        font-weight: 800;
+    }
+    nav ul {
+        display: flex;
+        gap: 28px;
+        list-style: none;
+    }
+    nav ul li a {
+        color: #e2e8f0;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s;
+        font-size: 0.95rem;
+    }
+    nav ul li a:hover {
+        color: #22c55e;
+        border-bottom: 2px solid #22c55e;
+        padding-bottom: 4px;
+    }
+
+    /* HERO */
+    .hero {
+        min-height: 90vh;
+        background: linear-gradient(125deg, #0a0f1e 0%, #0f172a 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1600') center/cover;
+        background-blend-mode: overlay;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 100px 20px;
+    }
+    .hero h2 {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #fff, #22c55e);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 1rem;
+    }
+    .hero p {
+        max-width: 800px;
+        margin: auto;
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #cbd5e6;
+    }
+    .btn {
+        display: inline-block;
+        margin-top: 2rem;
+        padding: 14px 38px;
+        background: #22c55e;
+        color: white;
+        border-radius: 40px;
+        font-weight: bold;
+        transition: 0.2s;
+        text-decoration: none;
+        box-shadow: 0 8px 20px rgba(34,197,94,0.3);
+    }
+    .btn:hover {
+        background: #16a34a;
+        transform: scale(1.02);
+        box-shadow: 0 12px 25px rgba(34,197,94,0.4);
+    }
+
+    section {
+        padding: 90px 60px;
+    }
+    .title {
+        text-align: center;
+        font-size: 2.8rem;
+        margin-bottom: 50px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #e2e8f0, #86efac);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* CARDS */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+    }
+    .card-glass {
+        background: rgba(30, 41, 59, 0.7);
+        backdrop-filter: blur(4px);
+        border-radius: 28px;
+        overflow: hidden;
+        transition: 0.3s ease;
+        border: 1px solid #334155;
+    }
+    .card-glass:hover {
+        transform: translateY(-8px);
+        border-color: #22c55e;
+        box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+    }
+    .card-glass img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+    }
+    .card-body {
+        padding: 24px;
+    }
+    .card-body h3 {
+        color: #22c55e;
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+    }
+
+    /* Dashboard KPIs */
+    .kpi-dash {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 28px;
+        margin-bottom: 60px;
+    }
+    .kpi-card {
+        background: #1e293b;
+        border-radius: 32px;
+        padding: 28px 20px;
+        text-align: center;
+        border-bottom: 3px solid #22c55e;
+        transition: 0.2s;
+    }
+    .kpi-card i {
+        font-size: 48px;
+        color: #22c55e;
+        margin-bottom: 15px;
+    }
+    .kpi-card h2 {
+        font-size: 2.8rem;
+        font-weight: 800;
+    }
+    .chart-container {
+        background: #1e293b;
+        border-radius: 32px;
+        padding: 28px;
+        margin-top: 30px;
+    }
+
+    /* Tablas mejoradas */
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: 24px;
+        background: #1e293b;
+        padding: 4px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th {
+        background: #22c55e;
+        color: #0f172a;
+        padding: 16px;
+        font-weight: 700;
+    }
+    td {
+        padding: 14px;
+        border-bottom: 1px solid #334155;
+        text-align: center;
+    }
+    tr:hover {
+        background: #2d3a53;
+    }
+
+    /* Panel Mensajes (nuevo) */
+    .two-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 30px;
+    }
+    .messages-panel {
+        background: #111827;
+        border-radius: 28px;
+        padding: 20px;
+        border: 1px solid #22c55e55;
+    }
+    .messages-list {
+        max-height: 350px;
+        overflow-y: auto;
+        margin-top: 20px;
+    }
+    .msg-item {
+        background: #1e293b;
+        margin-bottom: 12px;
+        padding: 16px;
+        border-radius: 20px;
+        border-left: 5px solid #22c55e;
+    }
+    .msg-item strong {
+        color: #22c55e;
+        display: block;
+    }
+    .msg-date {
+        font-size: 0.7rem;
+        color: #94a3b8;
+        margin-top: 6px;
+    }
+    .form-modern input, .form-modern textarea {
+        width: 100%;
+        padding: 14px;
+        margin: 12px 0;
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 20px;
+        color: white;
+        font-size: 1rem;
+    }
+    .form-modern button {
+        background: #22c55e;
+        padding: 14px;
+        width: 100%;
+        border: none;
+        border-radius: 40px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    /* Logs */
+    .logs-terminal {
+        background: #0a0c15;
+        border-radius: 28px;
+        padding: 24px;
+        font-family: 'Fira Code', monospace;
+        color: #6ee7b7;
+        border: 1px solid #22c55e;
+        font-size: 0.9rem;
+    }
+
+    footer {
+        background: #020617;
+        text-align: center;
+        padding: 32px;
+        border-top: 1px solid #22c55e30;
+    }
+
+    @media (max-width: 880px) {
+        nav {
+            padding: 14px 20px;
+            flex-direction: column;
+            gap: 12px;
+        }
+        nav ul {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+        section {
+            padding: 70px 20px;
+        }
+        .hero h2 {
+            font-size: 2.4rem;
+        }
+        .two-columns {
+            grid-template-columns: 1fr;
+        }
+        .title {
+            font-size: 2rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <h1><i class="fas fa-mountain"></i> TRAIL BOLIVIA ERP</h1>
+    <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#fases">Fases</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#productos">Productos</a></li>
+        <li><a href="#inventario">Inventario</a></li>
+        <li><a href="#monitor">Monitor</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#mensajes-admin">Mensajes</a></li>
+    </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="inicio">
+    <div>
+        <h2>TRAIL BOLIVIA ERP</h2>
+        <p>Plataforma empresarial inteligente para nutrición deportiva de altura · KPIs en tiempo real · Trazabilidad andina con tecnología GCP style</p>
+        <a href="#dashboard" class="btn"><i class="fas fa-chart-simple"></i> Explorar Métricas</a>
+    </div>
+</section>
+
+<!-- Fases -->
+<section id="fases">
+    <h1 class="title">Estrategia & Roadmap</h1>
+    <div style="border-left: 4px solid #22c55e; padding-left: 30px;">
+        <div style="margin-bottom: 40px;"><h3 style="color:#22c55e;">🚀 FASE 1 — Investigación & Data Science</h3><p>Análisis de mercado en altura (La Paz, Potosí). Se evaluaron necesidades de trail runners, ciclistas de montaña y se identificaron superalimentos: quinua, cañahua, tarwi. Se definió la arquitectura cloud-native.</p></div>
+        <div style="margin-bottom: 40px;"><h3 style="color:#22c55e;">⚙️ FASE 2 — Desarrollo del Ecosistema ERP</h3><p>Implementación de módulos: Dashboard ejecutivo, gestión de inventario, órdenes de producción, sistema de tickets (mensajes), monitoreo en vivo y analítica predictiva de ventas con +24 meses de datos simulados.</p></div>
+        <div><h3 style="color:#22c55e;">📈 FASE 3 — Escalamiento e IA (próximo)</h3><p>Modelos de forecasting, integración con sensores IoT en almacenes, y panel de business intelligence avanzado.</p></div>
+    </div>
+</section>
+
+<!-- Dashboard Ejecutivo KPIs -->
+<section id="dashboard">
+    <h1 class="title">Executive Dashboard</h1>
+    <div class="kpi-dash">
+        <div class="kpi-card"><i class="fa-solid fa-chart-line"></i><h2>Bs 2,154,200</h2><p>Ventas Totales (Anual)</p></div>
+        <div class="kpi-card"><i class="fa-solid fa-boxes"></i><h2>18,720</h2><p>Bolsas Vendidas</p></div>
+        <div class="kpi-card"><i class="fa-solid fa-users"></i><h2>5,342</h2><p>Clientes Activos</p></div>
+        <div class="kpi-card"><i class="fa-solid fa-leaf"></i><h2>98%</h2><p>Satisfacción</p></div>
+    </div>
+</section>
+
+<!-- CHART EXTENDIDO + 20+ DATOS (MÁS PROFESIONAL) -->
+<section>
+    <h1 class="title">Análisis de Ventas (24 meses) | Tendencia & Proyección</h1>
+    <div class="chart-container">
+        <canvas id="ventasChartExtended" style="max-height: 450px; width:100%"></canvas>
+    </div>
+    <div style="margin-top: 20px; text-align: center; background: #1e293b; padding: 15px; border-radius: 28px;">
+        <i class="fas fa-chart-simple"></i> Datos históricos mejorados con estacionalidad andina | Crecimiento interanual +32%
+    </div>
+</section>
+
+<!-- Productos -->
+<section id="productos">
+    <h1 class="title">Líneas Premium</h1>
+    <div class="cards-grid">
+        <div class="card-glass"><img src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=1200"><div class="card-body"><h3>KULLA</h3><p>Energía ancestral para trekking. Quinua, cacao andino, maca.</p></div></div>
+        <div class="card-glass"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200"><div class="card-body"><h3>TRAIL PRO</h3><p>Endurance + electrolitos naturales. Ideal para trail running.</p></div></div>
+        <div class="card-glass"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200"><div class="card-body"><h3>ASCENSO 6000</h3><p>Nutrición para alta montaña, adaptógeno y antioxidante.</p></div></div>
+    </div>
+</section>
+
+<!-- Inventario Tabla -->
+<section id="inventario">
+    <h1 class="title">Inventario Estratégico</h1>
+    <div class="table-wrapper">
+        <table>
+            <thead><tr><th>ID</th><th>Ingrediente</th><th>Stock (Kg)</th><th>Proveedor</th><th>Alerta</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>Quinua Real</td><td>342 Kg</td><td>Prod. del Altiplano</td><td style="color:#22c55e;">✔ Óptimo</td></tr>
+                <tr><td>2</td><td>Cacao Silvestre</td><td>89 Kg</td><td>Beni Orgánico</td><td style="color:#22c55e;">✔</td></tr>
+                <tr><td>3</td><td>Tarwi Andino</td><td>12 Kg</td><td>Cooperativa Cochabamba</td><td style="color:#facc15;">⚠ Bajo stock</td></tr>
+                <tr><td>4</td><td>Almendras</td><td>205 Kg</td><td>Importadora Sur</td><td>✔</td></tr>
+                <tr><td>5</td><td>Nueces</td><td>78 Kg</td><td>Norte Argentino</td><td>✔</td></tr>
+                <tr><td>6</td><td>Maca en polvo</td><td>45 Kg</td><td>Junín Perú</td><td>✔</td></tr>
+                <tr><td>7</td><td>Chía</td><td>110 Kg</td><td>Santa Cruz</td><td>✔</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Proceso productivo -->
+<section>
+    <h1 class="title">Cadena Productiva 4.0</h1>
+    <div class="cards-grid">
+        <div class="card-glass"><div class="card-body"><h3>🔍 Recepción & Calidad</h3><p>Certificación orgánica y control sanitario.</p></div></div>
+        <div class="card-glass"><div class="card-body"><h3>⚖ Pesaje Inteligente</h3><p>Balanzas integradas a la nube.</p></div></div>
+        <div class="card-glass"><div class="card-body"><h3>🌀 Mezcla Criogénica</h3><p>Preservación de nutrientes.</p></div></div>
+        <div class="card-glass"><div class="card-body"><h3>📦 Envasado Vacio</h3><p>Sostenible y trazabilidad QR.</p></div></div>
+    </div>
+</section>
+
+<!-- MONITOR SISTEMA -->
+<section id="monitor">
+    <h1 class="title">Centro de Monitoreo & SRE</h1>
+    <div class="kpi-dash">
+        <div class="kpi-card"><i class="fa-solid fa-cloud-arrow-up"></i><h2>99.98%</h2><p>Uptime</p></div>
+        <div class="kpi-card"><i class="fa-solid fa-database"></i><h2>127ms</h2><p>Latencia API</p></div>
+        <div class="kpi-card"><i class="fa-solid fa-bug"></i><h2>0</h2><p>Incidentes críticos</p></div>
+        <div class="kpi-card"><i class="fa-solid fa-shield"></i><h2>ISO 27001</h2><p>Seguridad</p></div>
+    </div>
+</section>
+
+<!-- Logs del sistema -->
+<section>
+    <h1 class="title">Auditoría & Event Logs</h1>
+    <div class="logs-terminal">
+        [✔] ERP Core v3.2 iniciado | 2026-01-20 08:14:22 UTC<br>
+        [📊] Sincronización de inventario completada. Stock actualizado.<br>
+        [✅] Dashboard KPIs generados exitosamente (últimos 30 días).<br>
+        [⚠] Alerta preventiva: Tarwi bajo mínimo – orden de compra sugerida.<br>
+        [💬] Módulo de mensajes recibido: nuevos contactos desde portal web.<br>
+        [🔒] Autenticación biométrica integrada (admin).<br>
+        [📈] Análisis de ventas ejecutado: +18% vs mes anterior.<br>
+        [🧠] Machine Learning: proyección Q1 con alta confianza.<br>
+    </div>
+</section>
+
+<!-- SECCIÓN DE MENSAJES ENVIADOS Y FORMULARIO (NUEVO LUGAR) -->
+<section id="contacto">
+    <h1 class="title">Centro de Comunicación</h1>
+    <div class="two-columns">
+        <!-- Panel de mensajes recibidos (dinámico) -->
+        <div class="messages-panel">
+            <h3 style="display:flex; gap:10px; align-items:center;"><i class="fa-regular fa-envelope"></i> Mensajes recibidos</h3>
+            <div id="messageListContainer" class="messages-list">
+                <!-- Los mensajes se renderizan acá desde localStorage / array -->
+                <div class="msg-item"><strong>Cliente Ejemplo</strong> Demo inicial: “Excelente producto, deseo cotización mayorista.”<div class="msg-date">2026-01-18 14:32</div></div>
+                <div class="msg-item"><strong>Claudio Mamani</strong> “Necesito información sobre envíos a Oruro.”<div class="msg-date">2026-01-19 09:15</div></div>
+            </div>
+        </div>
+        <!-- Formulario de envío de mensajes (nuevo mensaje) -->
+        <div class="messages-panel">
+            <h3><i class="fa-regular fa-paper-plane"></i> Enviar consulta</h3>
+            <form id="contactFormERP" class="form-modern">
+                <input type="text" id="msgName" placeholder="Nombre completo" required>
+                <input type="email" id="msgEmail" placeholder="Email corporativo" required>
+                <textarea id="msgText" rows="4" placeholder="Detalle de tu mensaje ..." required></textarea>
+                <button type="submit"><i class="fas fa-share"></i> Enviar mensaje</button>
+            </form>
+            <p style="margin-top: 12px; font-size:0.8rem; color:#94a3b8;">Los mensajes quedarán registrados en el panel lateral.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>© 2026 TRAIL BOLIVIA ERP — Soluciones inteligentes para nutrición de montaña · Powered by Andes Cloud</p>
+</footer>
+
+<script>
+    // ---------------------- CHART EXTENDIDO: 24 MESES (20+ datos reales) ----------------------
+    const meses = [
+        'Ene 2024', 'Feb 2024', 'Mar 2024', 'Abr 2024', 'May 2024', 'Jun 2024',
+        'Jul 2024', 'Ago 2024', 'Sep 2024', 'Oct 2024', 'Nov 2024', 'Dic 2024',
+        'Ene 2025', 'Feb 2025', 'Mar 2025', 'Abr 2025', 'May 2025', 'Jun 2025',
+        'Jul 2025', 'Ago 2025', 'Sep 2025', 'Oct 2025', 'Nov 2025', 'Dic 2025'
+    ];
+    // Datos de ventas (en miles de Bs) simulando crecimiento exponencial + estacionalidad
+    const ventasData = [
+        48.2, 52.1, 68.3, 72.5, 89.2, 104.6,     // 2024 H1
+        128.9, 145.3, 138.2, 162.7, 188.4, 210.5, // 2024 H2
+        235.8, 248.3, 282.9, 311.4, 345.2, 378.6, // 2025 H1
+        412.3, 448.9, 471.2, 502.7, 539.4, 582.1  // 2025 H2 (valores realistas, más de 20 datos)
+    ];
+    
+    const ctx = document.getElementById('ventasChartExtended').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: 'Ventas mensuales (miles Bs)',
+                data: ventasData,
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                borderWidth: 3,
+                pointRadius: 3,
+                pointBackgroundColor: '#22c55e',
+                pointBorderColor: '#0f172a',
+                tension: 0.2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(1)} mil Bs` } },
+                legend: { labels: { color: '#f1f5f9', font: { size: 12 } } }
+            },
+            scales: {
+                x: { ticks: { color: '#cbd5e6', maxRotation: 45, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#334155' } },
+                y: { ticks: { color: '#cbd5e6' }, grid: { color: '#334155' }, title: { display: true, text: 'Miles de Bolivianos', color: '#a0aec0' } }
+            }
+        }
+    });
+
+    // ---------------------- SISTEMA DE MENSAJES (localStorage persistente) ----------------------
+    // Cargar mensajes guardados o inicializar
+    let messagesArray = [];
+    const STORAGE_KEY = "trail_erp_messages";
+
+    function loadMessagesFromStorage() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if(stored) {
+            messagesArray = JSON.parse(stored);
+        } else {
+            // mensajes de ejemplo
+            messagesArray = [
+                { name: "Cliente Ejemplo", email: "demo@trail.bo", text: "Excelente producto, deseo cotización mayorista.", date: "2026-01-18 14:32" },
+                { name: "Claudio Mamani", email: "claudio@andinasport.com", text: "Necesito información sobre envíos a Oruro.", date: "2026-01-19 09:15" }
+            ];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(messagesArray));
+        }
+        renderMessages();
+    }
+
+    function renderMessages() {
+        const container = document.getElementById("messageListContainer");
+        if(!container) return;
+        if(messagesArray.length === 0) {
+            container.innerHTML = '<div class="msg-item" style="text-align:center;">📭 No hay mensajes aún</div>';
+            return;
+        }
+        container.innerHTML = messagesArray.map(msg => `
+            <div class="msg-item">
+                <strong><i class="fa-regular fa-user"></i> ${escapeHtml(msg.name)}</strong>
+                <p style="margin:8px 0; font-size:0.9rem;">${escapeHtml(msg.text)}</p>
+                <div class="msg-date"><i class="fa-regular fa-clock"></i> ${escapeHtml(msg.date)}</div>
+            </div>
+        `).join('');
+    }
+
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    function addNewMessage(name, email, text) {
+        const now = new Date();
+        const formattedDate = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+        const newMsg = {
+            name: name.trim(),
+            email: email.trim(),
+            text: text.trim(),
+            date: formattedDate
+        };
+        messagesArray.unshift(newMsg);  // mostrar los más recientes arriba
+        // mantener solo últimos 20 para no saturar
+        if(messagesArray.length > 30) messagesArray.pop();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(messagesArray));
+        renderMessages();
+        // notificación sutil
+        const logDiv = document.querySelector('.logs-terminal');
+        if(logDiv) {
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[📩] Nuevo mensaje de ${escapeHtml(name)} recibido en el panel.`;
+            logDiv.prepend(logEntry);
+            if(logDiv.children.length > 12) logDiv.removeChild(logDiv.lastChild);
+        }
+    }
+
+    // Inicializar mensajes
+    loadMessagesFromStorage();
+
+    // Handler del formulario de contacto
+    const contactForm = document.getElementById("contactFormERP");
+    if(contactForm) {
+        contactForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById("msgName");
+            const emailInput = document.getElementById("msgEmail");
+            const textInput = document.getElementById("msgText");
+            
+            if(!nameInput.value.trim() || !emailInput.value.trim() || !textInput.value.trim()) {
+                alert("Por favor complete todos los campos.");
+                return;
+            }
+            // validación email simple
+            if(!emailInput.value.includes('@')) {
+                alert("Correo electrónico inválido.");
+                return;
+            }
+            
+            addNewMessage(nameInput.value, emailInput.value, textInput.value);
+            // reset form
+            nameInput.value = '';
+            emailInput.value = '';
+            textInput.value = '';
+            alert("✅ Mensaje enviado exitosamente. Nuestro equipo responderá a la brevedad.");
+        });
+    }
+
+    // Simular mejora de integridad: mostrar mensajes en consola profesional
+    console.log("TRAIL BOLIVIA ERP | Sistema Experto Activo | Módulo de mensajes en línea");
+    
+    // Animación extra: tooltips
+    const style = document.createElement('style');
+    style.innerHTML = ` .kpi-card:hover { transform: translateY(-5px); background: #2d3e5f; transition:0.2s; } `;
+    document.head.appendChild(style);
+    
+    // Agregar también data actualizada del dashboard en tiempo real (simulando)
+    function refreshDynamicIndicators() {
+        // No es necesario, pero solo para demostrar dinamismo
+        const ventasTotales = ventasData.reduce((a,b)=>a+b,0).toFixed(0);
+        const totalBsElement = document.querySelector('.kpi-card:first-child h2');
+        if(totalBsElement && totalBsElement.innerText !== `Bs ${parseInt(ventasTotales).toLocaleString()}`) {
+            totalBsElement.innerText = `Bs ${parseInt(ventasTotales).toLocaleString()}`;
+        }
+    }
+    refreshDynamicIndicators();
+</script>
+</body>
+</html>
